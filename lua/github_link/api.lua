@@ -57,7 +57,8 @@ local function get_user_and_repo()
     return nil
   end
 
-  local gh_user, gh_repo = string.match(github_url, "github.com[:/](.+)/(.+).git")
+  local gh_user, gh_repo = github_url:match("github.com[:/](.+)/(.+)")
+  gh_repo = gh_repo:gsub("%.git$", "") -- strip `.git` from the end if it exists.
   return gh_user, gh_repo
 end
 
