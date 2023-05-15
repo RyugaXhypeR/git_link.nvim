@@ -57,7 +57,7 @@ local function get_local_git_dir(dir)
     i = i + 1
   end
 
-  if attr == nil then
+  if not attr then
     return nil
   end
 
@@ -74,13 +74,15 @@ local function get_user_and_repo()
   GIT_DIR = get_local_git_dir(nil)
 
   if GIT_DIR == nil then
-    os.exit()
+    print("No git directory found!")
+    return nil
   end
 
   GIT_PREFIX = get_git_prefix(GIT_DIR)
 
   local github_url = vim.fn.systemlist(GIT_PREFIX .. " config --get remote.origin.url")[1]
   if github_url == "" or github_url == nil then
+    print("Project is not hosted on github!")
     return nil
   end
 
@@ -104,6 +106,11 @@ local function get_highlighted_link(file_path, ln_start, ln_end)
   local branch = get_git_branch()
   local rel_path = vim.fn.systemlist(GIT_PREFIX .. " ls-files --full-name -- " .. file_path)[1]
 
+  if rel_path == nil then
+    print("File not found on github!")
+    return nil
+  end
+
   local url = string.format("https://github.com/%s/%s/blob/%s/%s#L%d",
     user, repo, branch, rel_path, ln_start)
 
@@ -123,12 +130,12 @@ local function get_selected()
   return ln_start[1], ln_stop[1]
 end
 
+-- 
 API.selected_link = function()
   vim.cmd[[execute "normal! \<esc>"]]
   local file_path = vim.fn.expand("%:p")
   local ln_start, ln_stop = get_selected()
   local url = get_highlighted_link(file_path, ln_start, ln_stop)
-  print(url)
   vim.fn.setreg("+", url)
 end
 
