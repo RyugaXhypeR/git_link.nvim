@@ -5,5 +5,5 @@ key_set(
     "x",
     "<leader>gl",
     api.selected_link,
-    { desc = "Linewise highlighting in github urls." }
+    { desc = "Linewise highlighting in github urls.", silent = false }
 )
