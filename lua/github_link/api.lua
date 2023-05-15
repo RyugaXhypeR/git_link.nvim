@@ -100,19 +100,46 @@ local function get_git_branch()
   return branch
 end
 
--- Construct the github url using file path and line numbers.
-local function get_highlighted_link(file_path, ln_start, ln_end)
-  local user, repo = get_user_and_repo()
-  local branch = get_git_branch()
-  local rel_path = vim.fn.systemlist(GIT_PREFIX .. " ls-files --full-name -- " .. file_path)[1]
+-- Does checks to see if the project is hosted on github and it has all prerequisites to generate a url.
+local function can_generate_url()
+  GIT_DIR = get_local_git_dir(nil)
+  if GIT_DIR == nil then 
+    return false 
+  end
 
-  if rel_path == nil then
-    print("File not found on github!")
+  GIT_PREFIX = get_git_prefix(GIT_DIR)
+
+  local branch = get_git_branch()
+  if branch == nil then 
+    return false 
+  end
+
+  local user_repo = get_user_and_repo()
+  if user_repo == nil then 
+    return false
+  end
+
+  local file_path = vim.fn.expand("%:p")
+  local relative_path = vim.fn.systemlist(GIT_PREFIX .. " ls-files --full-name -- " .. file_path)[1]
+  if relative_path == nil then 
+    return false
+  end
+
+  return { user_repo, branch, relative_path }
+end
+
+
+-- Construct the github url using file path and line numbers.
+local function get_highlighted_link(ln_start, ln_end)
+  local can_gen = can_generate_url()
+  if not can_gen then
     return nil
   end
 
+  local user, repo, branch, relative_path = unpack(can_gen)
+
   local url = string.format("https://github.com/%s/%s/blob/%s/%s#L%d",
-    user, repo, branch, rel_path, ln_start)
+    user, repo, branch, relative_path, ln_start)
 
   if ln_end ~= nil then
     url = url .. "-L" .. ln_end
@@ -133,9 +160,13 @@ end
 -- 
 API.selected_link = function()
   vim.cmd[[execute "normal! \<esc>"]]
-  local file_path = vim.fn.expand("%:p")
   local ln_start, ln_stop = get_selected()
-  local url = get_highlighted_link(file_path, ln_start, ln_stop)
+  local url = get_highlighted_link(ln_start, ln_stop)
+
+  if url == nil then
+    return nil
+  end
+
   vim.fn.setreg("+", url)
 end
 
