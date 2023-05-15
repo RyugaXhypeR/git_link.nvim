@@ -7,15 +7,41 @@ local GIT_DIR = nil
 local GIT_PREFIX = nil
 local MAX_PARENTS = 15  -- const
 
+--[[
+Checks if the directory contains a `.git` directory
+
+Parameters
+----------
+dir: str
+ The directory to check in
+
+Returns
+-------
+bool
+--]]
 local function contains_git_dir(dir)
   for attr in lfs.dir(dir) do
     if attr == '.git' and lfs.attributes(attr).mode == 'directory' then
-      return attr
+      return true
     end
   end
-  return nil
+  return false
 end
 
+--[[
+Return the parent directory which contains the `.git` folder.
+
+Parameters
+----------
+  dir: str | nil
+    The base directory to look into.
+    If dir is nil, it will search in directory of the current buffer.
+
+Returns
+-------
+  str:
+    The directory which contains the git directory.
+--]]
 local function get_local_git_dir(dir)
   if dir == nil then
     dir = vim.fn.expand("%:p:h")
@@ -38,6 +64,7 @@ local function get_local_git_dir(dir)
   return dir
 end
 
+-- Prefix to run git commands for specific projects.
 local function get_git_prefix(dir)
   return "git -C " .. dir
 end
@@ -87,6 +114,7 @@ local function get_highlighted_link(file_path, ln_start, ln_end)
   return url
 end
 
+-- Return the line number of start and stop marks of the current buffer.
 local function get_selected()
   local ln_start = vim.api.nvim_buf_get_mark(0, '<')
   local ln_stop = vim.api.nvim_buf_get_mark(0, '>')
