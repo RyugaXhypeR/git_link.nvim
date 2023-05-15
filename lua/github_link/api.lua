@@ -49,7 +49,7 @@ local function get_local_git_dir(dir)
   local attr = contains_git_dir(dir)
   local i = 0
 
-  -- Look through `MAX_PARENTS` directories to find a git directory.
+  -- Walk back the directories to find any `.git` dirs.
   while not attr and dir ~= '/' do
     -- Look for `.git` in the parent directory.
     dir = dir:gsub("/(%w+)$", "")
