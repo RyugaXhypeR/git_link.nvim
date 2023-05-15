@@ -5,7 +5,6 @@ local API = {}
 -- TODO: Don't use globals.
 local GIT_DIR = nil
 local GIT_PREFIX = nil
-local MAX_PARENTS = 15  -- const
 
 --[[
 Checks if the directory contains a `.git` directory
@@ -51,8 +50,9 @@ local function get_local_git_dir(dir)
   local i = 0
 
   -- Look through `MAX_PARENTS` directories to find a git directory.
-  while attr == nil and i < MAX_PARENTS do
-    dir = dir .. "/.."
+  while not attr and dir ~= '/' do
+    -- Look for `.git` in the parent directory.
+    dir = dir:gsub("/(%w+)$", "")
     attr = contains_git_dir(dir)
     i = i + 1
   end
