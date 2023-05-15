@@ -51,7 +51,7 @@ local function get_local_git_dir(dir)
   -- Walk back the directories to find any `.git` dirs.
   while not attr and dir ~= '/' do
     -- Look for `.git` in the parent directory.
-    dir = dir:gsub('/(%w+)$', '')
+    dir = dir:gsub('/([^/]+)$', '')
     attr = contains_git_dir(dir)
   end
 
