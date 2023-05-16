@@ -4,7 +4,7 @@ local api = require("github_link.api")
 key_set(
   "x",
   "<leader>gl",
-  api.selected_url,
+  api.copy_url,
   { desc = "Linewise highlighting in github urls.", silent = false }
 )
 
