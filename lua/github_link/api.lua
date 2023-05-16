@@ -14,6 +14,7 @@ local function get_marks()
   return ln_start, ln_stop
 end
 
+-- Return the blob url.
 local function get_url()
   local repo_url = Git.get_repo_url(nil)
   local branch = Git.get_git_branch(nil)
@@ -23,6 +24,7 @@ local function get_url()
   return UrlFormat.url_format(repo_url, branch, relative_path, ln_start, ln_stop)
 end
 
+-- Copies the url to `+` register.
 M.copy_url = function()
   local url = get_url()
   if url then
@@ -30,6 +32,8 @@ M.copy_url = function()
   end
 end
 
+-- Opens the url in browser.
+-- Requires `xdg-open` to work.
 M.open_url = function()
   local url = get_url()
   if url then
