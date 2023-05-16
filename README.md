@@ -2,9 +2,9 @@
 A neovim plugin to generate permalink from the editor.
 
 ## Requirements
-[git](https://git-scm.com)
-[plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
-[xdg-utils](https://www.freedesktop.org/wiki/Software/xdg-utils/)
+- [git](https://git-scm.com)
+- [plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
+- [xdg-utils](https://www.freedesktop.org/wiki/Software/xdg-utils/)
 
 ## Installation
 Using [plug](https://github.com/junegunn/vim-plug):
