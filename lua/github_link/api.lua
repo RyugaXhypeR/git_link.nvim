@@ -117,7 +117,7 @@ end
 
 
 -- Construct the github url using file path and line numbers.
-local function get_highlighted_link(ln_start, ln_end)
+local function get_highlighted_url(ln_start, ln_end)
   local can_gen = can_generate_url()
   if not can_gen then
     return nil
@@ -144,15 +144,31 @@ local function get_selected()
   return ln_start[1], ln_stop[1]
 end
 
--- 
-API.selected_link = function()
+local function get_url()
+  -- Exit visual mode before getting mark readings.
   vim.cmd[[execute "normal! \<esc>"]]
   local ln_start, ln_stop = get_selected()
-  local url = get_highlighted_link(ln_start, ln_stop)
+  local url = get_highlighted_url(ln_start, ln_stop)
+  return url
+end
+
+-- Copy the URL to `+` register.
+API.selected_url = function()
+  local url = get_url()
   if url == nil then
     return nil
   end
   vim.fn.setreg('+', url)
+end
+
+-- Open the URL in default browser.
+-- Seperate terminal instance is spawned to not interfear with the neovim instance.
+API.open_url = function ()
+  local url = get_url()
+  if url == nil then
+    return nil
+  end
+  vim.fn.systemlist("open " .. url .. " &")
 end
 
 return API
