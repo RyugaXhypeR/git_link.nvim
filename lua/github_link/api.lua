@@ -6,7 +6,7 @@ local UrlFormat = require('github_link.url_format')
 -- Return the line number of start and stop mark of current buffer.
 local function get_marks()
   -- Turn off visual mode.
-  vim.cmd[[execute "normal! \<Esc>"]]
+  vim.cmd [[execute "normal! \<Esc>"]]
 
   local ln_start = vim.api.nvim_buf_get_mark(0, '<')[1]
   local ln_stop = vim.api.nvim_buf_get_mark(0, '>')[1]
@@ -43,7 +43,6 @@ M.open_url = function()
       cwd = vim.fn.expand("%:p")
     }):start()
   end
-
 end
 
 return M
