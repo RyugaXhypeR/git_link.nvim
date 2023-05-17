@@ -17,8 +17,13 @@ end
 -- Return the permalink.
 M.url_format = function(repo_url, branch, relative_path, ln_start, ln_stop)
   local split = M.url_split(repo_url)
-  if not (split and branch and relative_path) then
-    return nil
+
+  if not split then
+    vim.notify("Couldn't parse url.")
+  elseif not branch then
+    vim.notify("Couldn't fetch current branch.")
+  elseif not relative_path then
+    vim.notify("File does not exist.")
   end
 
   local blob = ("https://%s.com/%s/%s/blob/%s/%s"):format(

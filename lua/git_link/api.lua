@@ -1,32 +1,23 @@
 local M = {}
 local Job = require('plenary.job')
-local Git = require('github_link.git')
-local UrlFormat = require('github_link.url_format')
-
--- Return the line number of start and stop mark of current buffer.
-local function get_marks()
-  -- Turn off visual mode.
-  vim.cmd [[execute "normal! \<Esc>"]]
-
-  local ln_start = vim.api.nvim_buf_get_mark(0, '<')[1]
-  local ln_stop = vim.api.nvim_buf_get_mark(0, '>')[1]
-
-  return ln_start, ln_stop
-end
+local Git = require('git_link.git')
+local UrlFormat = require('git_link.url_format')
+local Utils = require('git_link.utils')
 
 -- Return the blob url.
-local function get_url()
+local function get_url(op_mode)
   local repo_url = Git.get_repo_url(nil)
   local branch = Git.get_git_branch(nil)
   local relative_path = Git.get_relative_path(nil, nil)
-  local ln_start, ln_stop = get_marks()
+  local ln_start, ln_stop = Utils.get_mark_region(op_mode)
 
   return UrlFormat.url_format(repo_url, branch, relative_path, ln_start, ln_stop)
 end
 
 -- Copies the url to `+` register.
-M.copy_url = function()
-  local url = get_url()
+M.copy_url = function(op_mode)
+  local url = get_url(op_mode)
+  print(url)
   if url then
     vim.fn.setreg('+', url)
   end
