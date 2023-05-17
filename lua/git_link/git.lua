@@ -13,7 +13,7 @@ local M = {}
 -- cwd: str | nil
 --   The working directory in which the command is to be executed.
 --   Defaults to working directory of the buffer if not specified.
-M.git_cmd = function(args, cwd)
+function M.git_cmd(args, cwd)
   return Job:new({
     command = 'git',
     args = args,
@@ -25,12 +25,12 @@ M.git_cmd = function(args, cwd)
 end
 
 -- Get the current branch name, this will be used to generate the blob for that branch.
-M.get_git_branch = function(cwd)
+function M.get_git_branch(cwd)
   return M.git_cmd({ 'branch', '--show-current' }, cwd)[1]
 end
 
 -- Get the current git remote url.
-M.get_repo_url = function(cwd)
+function M.get_repo_url(cwd)
   local remote = M.git_cmd({ 'remote' })[1]
   if remote == nil then
     return nil
@@ -40,7 +40,7 @@ M.get_repo_url = function(cwd)
 end
 
 -- Get the root directory of the git repo.
-M.get_git_root = function(cwd)
+function M.get_git_root(cwd)
   return M.git_cmd({ 'rev-parse', '--show-toplevel' }, cwd)[1]
 end
 
@@ -53,7 +53,7 @@ end
 --
 -- cwd: str | nil
 -- The working directory in which the command is to be executed.
-M.get_relative_path = function(file_path, cwd)
+function M.get_relative_path(file_path, cwd)
   return M.git_cmd({ 'ls-files', '--full-name', '--', file_path or vim.fn.expand('%:p') }, cwd)[1]
 end
 

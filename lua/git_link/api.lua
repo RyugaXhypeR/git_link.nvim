@@ -15,7 +15,7 @@ local function get_url(op_mode)
 end
 
 -- Copies the url to `+` register.
-M.copy_url = function(op_mode)
+function M.copy_url(op_mode)
   local url = get_url(op_mode)
   print(url)
   if url then
@@ -25,7 +25,7 @@ end
 
 -- Opens the url in browser.
 -- Requires `xdg-open` to work.
-M.open_url = function()
+function M.open_url()
   local url = get_url()
   local open_cmd = 'open'
   local os_name = vim.loop.os_uname().sysname
