@@ -31,12 +31,11 @@ end
 
 -- Get the current git remote url.
 M.get_repo_url = function(cwd)
-  local remote = M.git_cmd({ 'remote', '-v' })[2]
+  local remote = M.git_cmd({ 'remote' })[1]
   if remote == nil then
     return nil
   end
 
-  remote = remote:match('[^%s]+')
   return M.git_cmd({ 'config', '--get', ('remote.%s.url'):format(remote) }, cwd)[1]
 end
 
