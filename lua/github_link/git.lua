@@ -36,7 +36,7 @@ M.get_repo_url = function(cwd)
     return nil
   end
 
-  remote = remote:gmatch('[^%s]+')
+  remote = remote:match('[^%s]+')
   return M.git_cmd({ 'config', '--get', ('remote.%s.url'):format(remote) }, cwd)[1]
 end
 
