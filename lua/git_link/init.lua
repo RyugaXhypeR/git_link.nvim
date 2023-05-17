@@ -14,9 +14,10 @@ key_set(
   { desc = 'Opens the url in the default browser.', silent = true }
 )
 
-key_set(
-  'n',
-  '<leader>gl',
-  '<cmd>lua require("git_link.api").copy_url("n")<cr>',
-  { desc = 'Permalink!', }
-)
+-- -- TODO
+-- key_set(
+--   'n',
+--   '<leader>gl',
+--   '<cmd>lua require("git_link.api").copy_url("n")<cr>',
+--   { desc = 'Permalink!', }
+-- )
