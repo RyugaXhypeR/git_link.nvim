@@ -4,14 +4,14 @@ key_set(
   'x',
   '<leader>gl',
   '<cmd>lua require("git_link.api").copy_url("v")<cr>',
-  { desc = 'Linewise highlighting in github urls.', silent = false }
+  { desc = 'Copy the permalink to clipboard', silent = false }
 )
 
 key_set(
   'x',
   '<leader>go',
   '<cmd>lua require("git_link.api").open_url("v")<cr>',
-  { desc = 'Opens the url in the default browser.', silent = true }
+  { desc = 'Opens the permalink in the default browser.', silent = true }
 )
 
 -- -- TODO
