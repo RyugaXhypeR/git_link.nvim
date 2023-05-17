@@ -36,11 +36,17 @@ end
 -- Requires `xdg-open` to work.
 M.open_url = function()
   local url = get_url()
+  local open_cmd = 'open'
+  local os_name = vim.loop.os_uname().sysname
+
+  if os_name == 'Linux' then
+    open_cmd = 'xdg-' .. open_cmd
+  end
+
   if url then
     Job:new({
-      command = "open",
+      command = open_cmd,
       args = { url },
-      cwd = vim.fn.expand("%:p")
     }):start()
   end
 end
